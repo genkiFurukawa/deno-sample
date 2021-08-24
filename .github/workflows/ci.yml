@@ -1,0 +1,13 @@
+on: push
+jobs:
+  deno:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # CI環境にDenoを用意する
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: "1.13.2"
+          # deno testを実行する
+          - name: deno test
+          run: deno test --allow-net
