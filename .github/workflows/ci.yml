@@ -1,13 +1,20 @@
+name: ci
 on: push
 jobs:
   deno:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      # CI環境にDenoを用意する
-      - uses: denoland/setup-deno@v1
+      - name: check out repository
+        uses: actions/checkout@v2
+      - name: setup deno
+        uses: denoland/setup-deno@v1
         with:
           deno-version: "1.13.2"
-          # deno testを実行する
-          - name: deno test
-            run: deno test --allow-net
+      - name: deno fmt
+        # badly_formatted.ts はフォーマットが崩れているコードの例として用意しているので、チェック対象から外す
+        run: deno fmt --check --ignore=badly_formatted.ts
+      - name: deno lint
+        # lint.ts はリントエラーを意図的に発生させているコードなので、チェック対象から外す
+        run: deno lint --ignore=lint.ts
+      - name: deno test
+        run: deno test --allow-net
